@@ -6,11 +6,13 @@ module "clusters" {
   source = "../clusters"
 }
 
+# то еще извращение...
+
 locals {
   namespaces = flatten([
     for cluster, namespaces_list in var.team_clusters : [
       for namespace_name, namespace_spec in namespaces_list : {
-        namespace = namespace_name
+        name = namespace_name
         cluster = cluster
         labels = namespace_spec.labels
         annotations = namespace_spec.annotations
@@ -21,16 +23,16 @@ locals {
 
 resource "kubernetes_namespace_v1" "namespace" {
   for_each = {
-    for namespace in local.namespaces : "${namespace.cluster}-${namespace.namespace}" => namespace
+    for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
   }
-  provider = each.cluster
+  provider = clusters.kubernetes.each.cluster
   lifecycle {
     prevent_destroy = true
   }
   metadata {
     annotations = each.annotations
     labels = merge(each.labels, {team = var.team_name})
-    name = each.namespace
+    name = each.name
   }
 }
 
@@ -38,15 +40,17 @@ resource "kubernetes_namespace_v1" "namespace" {
 # https://learn.hashicorp.com/tutorials/terraform/for-each
 
 resource "kubernetes_network_policy" "zero-trust" {
-  for_each = var.team_clusters
-  provider = each.cluster
+  for_each = {
+    for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
+  }
+  provider = clusters.kubernetes.each.cluster
   lifecycle {
     prevent_destroy = true
   }
 
   metadata {
     name      = "default-deny"
-    namespace = each.namespace
+    namespace = each.name
   }
 
   spec {

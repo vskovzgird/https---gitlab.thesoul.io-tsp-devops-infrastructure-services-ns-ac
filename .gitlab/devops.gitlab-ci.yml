@@ -7,7 +7,7 @@
     # Important param
     TF_ROOT: ${CI_PROJECT_DIR}/teams
     # Important param
-    TF_STATE_NAME: teams
+    TF_STATE_NAME: devops
   cache:
     key: teams
     paths:

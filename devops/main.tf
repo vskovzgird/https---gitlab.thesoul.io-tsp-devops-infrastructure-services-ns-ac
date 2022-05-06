@@ -1,29 +1,39 @@
 // https://learn.hashicorp.com/tutorials/terraform/module-create?in=terraform/modules
 
-module "dns" {
+# првоайдер можно объявлять наверху дефолтный
+# его будут использовать все ресурсы без указания provider
+# https://www.terraform.io/language/providers/configuration
+
+# !! The version argument in provider configurations is deprecated. 
+# In Terraform 0.13 and later, always declare provider version constraints in the required_providers block.
+
+
+module "team" {
   source   = "../modules/team"
 
-  team_name   = "devops"
+  team_name = "devops"
   team_clusters  = {
     nbg4 = {
       test = {
-        labels = {}
+        labels = {},
         annotations = {}
       },
       test-2 = {
-        labels = {}
+        labels = {},
         annotations = {}
       }
     },
     nbg2 = {
       test = {
-        labels = {}
+        labels = {},
         annotations = {}
       },
-      test-2 = {
-        labels = {}
+      test-3 = {
+        labels = {},
         annotations = {}
       }
     },
   }
 }
+
+# and put some specific for team objects
