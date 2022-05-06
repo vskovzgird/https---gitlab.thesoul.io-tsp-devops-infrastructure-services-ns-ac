@@ -1,15 +1,16 @@
 .template:
   variables:
+    TEAM: devops
     VAULT_ROLE: gitlab-policies-role
     VAULT_ADDR: https://vault.tsp.li
     # https://www.terraform.io/cli/config/environment-variables#tf_var_name
     TF_VAR_some_var_to_pass: somevalue
     # Important param
-    TF_ROOT: ${CI_PROJECT_DIR}/teams
+    TF_ROOT: ${CI_PROJECT_DIR}/$TEAM
     # Important param
-    TF_STATE_NAME: devops
+    TF_STATE_NAME: $TEAM
   cache:
-    key: teams
+    key: devops
     paths:
       - ${TF_ROOT}/.terraform
 
@@ -46,7 +47,6 @@ devops-apply:
   stage: deploy
   extends:
     - .template
-    # - .rules
   environment:
     name: teams
   script:
