@@ -1,25 +1,36 @@
 # при шаблонизации имя ресурса будет сформировано самим тераформом вида name["${each.key}"], т.е 
-# в данном случае team_namespace ресурса итоговое имя будет team_namespace["namespace-1"]
-# для цикла по     
-#    namespace-1 = {
-#      cluster = "nbg4"
-#      labels = {}
+# в данном случае namespace ресурса итоговое имя будет namespace["namespace-1"]
 # i.e https://gitlab.thesoul.io/tsp/devops/infrastructure-services/hetzner/-/jobs/842165
 
 module "clusters" {
   source = "../clusters"
 }
 
-resource "kubernetes_namespace_v1" "team_namespace" {
-  for_each = var.namespaces
-  provider = clusters.kubernetes.${each.value.cluster}
+locals {
+  namespaces = flatten([
+    for cluster, namespaces_list in var.team_clusters : [
+      for namespace_name, namespace_spec in namespaces_list : {
+        namespace = namespace_name
+        cluster = cluster
+        labels = namespace_spec.labels
+        annotations = namespace_spec.annotations
+      }
+    ]
+  ])
+}
+
+resource "kubernetes_namespace_v1" "namespace" {
+  for_each = {
+    for namespace in local.namespaces : "${namespace.cluster}-${namespace.namespace}" => namespace
+  }
+  provider = each.cluster
   lifecycle {
     prevent_destroy = true
   }
   metadata {
-    annotations = {}
-    labels = merge(each.value.labels, {team = var.team_name})
-    name = each.key
+    annotations = each.annotations
+    labels = merge(each.labels, {team = var.team_name})
+    name = each.namespace
   }
 }
 
@@ -27,15 +38,15 @@ resource "kubernetes_namespace_v1" "team_namespace" {
 # https://learn.hashicorp.com/tutorials/terraform/for-each
 
 resource "kubernetes_network_policy" "zero-trust" {
-  for_each = var.namespaces
-  provider = clusters.kubernetes.${each.value.cluster}
+  for_each = var.team_clusters
+  provider = each.cluster
   lifecycle {
     prevent_destroy = true
   }
 
   metadata {
     name      = "default-deny"
-    namespace = each.key
+    namespace = each.namespace
   }
 
   spec {
