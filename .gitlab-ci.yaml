@@ -1,0 +1,18 @@
+variables:
+  TF_IMAGE: registry.gitlab.com/gitlab-org/terraform-images/stable:latest
+
+image: $TF_IMAGE
+
+before_script:
+  - cd ${TF_ROOT}
+
+stages:
+  # https://www.hashicorp.com/blog/testing-hashicorp-terraform
+  - prepare
+  - validate
+  - build
+  - deploy
+
+include:
+  - local: .gitlab/ci/*.gitlab-ci.yml
+

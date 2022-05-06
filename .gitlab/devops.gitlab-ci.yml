@@ -1,0 +1,60 @@
+.template:
+  variables:
+    VAULT_ROLE: gitlab-policies-role
+    VAULT_ADDR: https://vault.tsp.li
+    # https://www.terraform.io/cli/config/environment-variables#tf_var_name
+    TF_VAR_some_var_to_pass: somevalue
+    # Important param
+    TF_ROOT: ${CI_PROJECT_DIR}/teams
+    # Important param
+    TF_STATE_NAME: teams
+  cache:
+    key: teams
+    paths:
+      - ${TF_ROOT}/.terraform
+
+devops-validate:
+  stage: validate
+  extends:
+    - .template
+  script:
+    - gitlab-terraform validate
+
+devops-plan:
+  stage: build
+  extends:
+    - .template
+  script:
+    - export VAULT_TOKEN="$(curl -k -s -X POST "$VAULT_ADDR/v1/auth/jwt/login" --data "{\"jwt\":\"$CI_JOB_JWT\",\"role\":\"$VAULT_ROLE\"}" | jq -r .auth.client_token)"
+    - gitlab-terraform plan
+    - gitlab-terraform plan-json
+  artifacts:
+    name: plan
+    paths:
+      - ${TF_ROOT}/plan.cache
+    reports:
+      terraform: ${TF_ROOT}/plan.json
+  rules:
+    # You should use rules: changes only with branch pipelines or merge request pipelines.
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: on_success
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+      allow_failure: true
+
+devops-apply:
+  stage: deploy
+  extends:
+    - .template
+    # - .rules
+  environment:
+    name: teams
+  script:
+    - export VAULT_TOKEN="$(curl -k -s -X POST "$VAULT_ADDR/v1/auth/jwt/login" --data "{\"jwt\":\"$CI_JOB_JWT\",\"role\":\"$VAULT_ROLE\"}" | jq -r .auth.client_token)"
+    - gitlab-terraform apply
+  needs:
+    - plan
+  rules:
+    # You should use rules: changes only with branch pipelines or merge request pipelines.
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: manual
