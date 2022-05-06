@@ -15,7 +15,7 @@ variable "team_name" {
 
 variable "team_clusters" {
   description = "Team clusters and their namespaces"
-  type = map(map(map))
+  type = map
   default = {
     nbg4 = {
       test = {

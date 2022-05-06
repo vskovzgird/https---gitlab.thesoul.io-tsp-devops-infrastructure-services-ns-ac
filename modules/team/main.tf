@@ -8,6 +8,10 @@ module "clusters" {
 
 # то еще извращение...
 
+
+
+# МОЖНО ЧЕРЕЗ locals сделать словарь из providers и по ключу получать нужный, затем передавать его в for_each
+
 locals {
   namespaces = flatten([
     for cluster, namespaces_list in var.team_clusters : [
@@ -21,18 +25,18 @@ locals {
   ])
 }
 
-resource "kubernetes_namespace_v1" "namespace" {
+resource "kubernetes_namespace" "namespace" {
   for_each = {
     for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
   }
-  provider = clusters.kubernetes.each.cluster
+  # provider = clusters.kubernetes.test
   lifecycle {
     prevent_destroy = true
   }
   metadata {
-    annotations = each.annotations
-    labels = merge(each.labels, {team = var.team_name})
-    name = each.name
+    annotations = each.value.annotations
+    labels = merge(each.value.labels, {team = var.team_name})
+    name = each.value.name
   }
 }
 
@@ -43,20 +47,18 @@ resource "kubernetes_network_policy" "zero-trust" {
   for_each = {
     for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
   }
-  provider = clusters.kubernetes.each.cluster
+  # provider = clusters.kubernetes.each.cluster
   lifecycle {
     prevent_destroy = true
   }
 
   metadata {
     name      = "default-deny"
-    namespace = each.name
+    namespace = each.value.name
   }
 
   spec {
-    pod_selector {
-      match_labels {}
-    }
+    pod_selector {}
 
     policy_types = ["Ingress", "Egress"]
   }

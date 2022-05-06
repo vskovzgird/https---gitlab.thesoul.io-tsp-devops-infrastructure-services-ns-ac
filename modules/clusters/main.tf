@@ -27,7 +27,6 @@ terraform {
 }
 
 provider "kubernetes" {
-  host                   = "https://k8s-master1.nbg4.tsp.li:6443"
   cluster_ca_certificate = ""
   alias = "nbg4"
 }
