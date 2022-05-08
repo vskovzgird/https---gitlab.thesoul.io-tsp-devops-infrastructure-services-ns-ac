@@ -32,6 +32,10 @@ module "team" {
       test-2 = {
         labels = {},
         annotations = {}
+      },
+      test-3 = {
+        labels = {},
+        annotations = {}
       }
     },
     # nbg2 = {

@@ -25,6 +25,12 @@ locals {
   ])
 }
 
+# resource "kubernetes_namespace" "test-test-2" {
+#   metadata {
+#     name = "test-2"
+#   }
+# }
+
 resource "kubernetes_namespace" "namespace" {
   for_each = {
     for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
