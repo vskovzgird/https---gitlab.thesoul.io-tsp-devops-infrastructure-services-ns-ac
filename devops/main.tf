@@ -31,7 +31,9 @@ module "team" {
       },
       test-2 = {
         labels = {},
-        annotations = {}
+        annotations = {
+            ann-1 = "ann-1"
+        }
       },
       test-3 = {
         labels = {},
