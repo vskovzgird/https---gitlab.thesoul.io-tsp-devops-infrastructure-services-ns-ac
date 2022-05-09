@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"team.clusters","Source":"../clusters","Dir":"../modules/clusters"},{"Key":"","Source":"","Dir":"."},{"Key":"team","Source":"../modules/team","Dir":"../modules/team"}]}
+{"Modules":[{"Key":"clusters","Source":"../modules/clusters","Dir":"../modules/clusters"},{"Key":"","Source":"","Dir":"."},{"Key":"team","Source":"../modules/team","Dir":"../modules/team"},{"Key":"team.clusters","Source":"../clusters","Dir":"../modules/clusters"}]}

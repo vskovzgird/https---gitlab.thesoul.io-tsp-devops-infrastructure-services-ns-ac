@@ -40,16 +40,6 @@ module "team" {
         annotations = {}
       }
     },
-    # nbg2 = {
-    #   test = {
-    #     labels = {},
-    #     annotations = {}
-    #   },
-    #   test-3 = {
-    #     labels = {},
-    #     annotations = {}
-    #   }
-    # },
   }
 }
 
