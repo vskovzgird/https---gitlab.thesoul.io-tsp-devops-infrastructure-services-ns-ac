@@ -3,6 +3,11 @@ variable "team_name" {
   type        = string
 }
 
+variable "cluster_name" {
+  description = "Unique clsuter name"
+  type = string
+}
+
 # https://www.terraform.io/language/values/variables
 # BUG! type = map на вершине которого идёт namespace name
 # не подходит, так как ключи должны быть уникальны

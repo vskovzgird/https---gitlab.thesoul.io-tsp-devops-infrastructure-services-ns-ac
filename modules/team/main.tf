@@ -11,7 +11,7 @@ locals {
     for cluster, namespaces_list in var.team_clusters : [
       for namespace_name, namespace_spec in namespaces_list : {
         name = namespace_name
-        cluster = cluster
+        cluster = var.cluster_name
         labels = namespace_spec.labels
         annotations = namespace_spec.annotations
       }
