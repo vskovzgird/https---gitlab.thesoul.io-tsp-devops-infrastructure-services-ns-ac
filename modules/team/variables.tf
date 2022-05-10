@@ -4,7 +4,7 @@ variable "team_name" {
 }
 
 variable "cluster_name" {
-  description = "Unique clsuter name"
+  description = "Unique cluster name"
   type = string
 }
 

@@ -25,7 +25,7 @@ locals {
         annotations = {
             ann-1 = "ann-1"
         }
-        },
+    },
         test-3 = {
         labels = {},
         annotations = {}
@@ -35,17 +35,17 @@ locals {
     ns-1 = {
         labels = {},
         annotations = {}
-        },
+    },
     ns-2 = {
         labels = {},
         annotations = {
             ann-1 = "ann-1"
         }
-        },
-        test-3 = {
+    },
+    test-3 = {
         labels = {},
         annotations = {}
-        }
+    }
   }
 }
 
