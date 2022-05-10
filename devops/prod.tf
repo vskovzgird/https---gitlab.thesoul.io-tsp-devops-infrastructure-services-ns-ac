@@ -3,7 +3,7 @@
 #   source   = "../modules/team"
 #   cluster_name = "prod"
 #   team_name = local.team_name
-#   team_clusters  = {
+#   team_namespaces  = {
 #     test = local.test
 #   }
 # }

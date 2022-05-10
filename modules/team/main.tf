@@ -8,7 +8,7 @@
 
 locals {
   namespaces = flatten([
-    for cluster, namespaces_list in var.team_clusters : [
+    for cluster, namespaces_list in var.team_namespaces : [
       for namespace_name, namespace_spec in namespaces_list : {
         name = namespace_name
         cluster = var.cluster_name
@@ -23,7 +23,6 @@ resource "kubernetes_namespace" "namespace" {
   for_each = {
     for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
   }
-  # provider = clusters.kubernetes.test
   lifecycle {
     prevent_destroy = true
   }
@@ -41,7 +40,6 @@ resource "kubernetes_network_policy" "zero-trust" {
   for_each = {
     for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
   }
-  # provider = clusters.kubernetes.each.cluster
   lifecycle {
     prevent_destroy = true
   }

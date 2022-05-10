@@ -14,11 +14,7 @@ variable "cluster_name" {
 # а нам может потребоваться создавать на двух разных кластерах namespace с одинаковым именем, но разными лейблами
 # т.о, на вершину нужно ставить имя кластера?
 
-# https://yellowdesert.consulting/2021/05/31/terraform-map-and-object-patterns/#untyped-nested-map !
-# https://www.reddit.com/r/Terraform/comments/mwyb4p/trouble_with_nested_maps_in_for_each/
-# https://www.terraform.io/language/functions/flatten
-
-variable "team_clusters" {
+variable "team_namespaces" {
   description = "Team clusters and their namespaces"
   type = map
   default = {

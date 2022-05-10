@@ -6,7 +6,6 @@
 Для каждой команды одна директория (модуль в терминологии Terraform), в котором будут описаны все её неймспейсы \
 Модуль версионируются.
 
-Модуль `team` импортирует модуль `clusters` чтобы оперировать набором провайдеров для подключения к кластерам.
 Модуль `team` используется для создания реальных namespace команд.
 
 # Структура
@@ -65,3 +64,9 @@ minikube kubectl get secrets -- -o jsonpath="{.items[?(@.metadata.annotations['k
 При импорте у меня была ошибка - я не верно указывал индекс - вместо test-2, я указывал test, а это индекс namespace с именем test
 Terraform считал, что я меняю test, а не создаю test-2 и пытался пересоздать namespace test, но падал с ошибкой Instance cannot be destroyed, так как на нём lifecycle
 Пробуем добавить аннотаций в test-2 перешедший под контроль TF.
+
+# REFS
+- https://www.puppeteers.net/blog/terraform-resources-with-dynamic-provider-values/#:~:text=Terraform%20allows%20you%20to%20define,have%20to%20learn%20provider%20aliases. 
+- https://yellowdesert.consulting/2021/05/31/terraform-map-and-object-patterns/#untyped-nested-map !
+- https://www.reddit.com/r/Terraform/comments/mwyb4p/trouble_with_nested_maps_in_for_each/
+- https://www.terraform.io/language/functions/flatten

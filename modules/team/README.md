@@ -8,5 +8,3 @@ namespaces с указанием кластера, на котором они б
 
 Team -> Cluster -> Namespace Set
 
-# REFS
-- https://www.puppeteers.net/blog/terraform-resources-with-dynamic-provider-values/#:~:text=Terraform%20allows%20you%20to%20define,have%20to%20learn%20provider%20aliases. 
