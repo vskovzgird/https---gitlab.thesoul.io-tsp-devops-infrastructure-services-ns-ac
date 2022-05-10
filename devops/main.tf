@@ -13,9 +13,42 @@ terraform {
   }
 }
 
-# module "test" {
-#   source = "./test.tf"
-# }
+locals {
+  team_name = "devops"
+  test = {
+    test = {
+        labels = {},
+        annotations = {}
+        },
+    test-2 = {
+        labels = {},
+        annotations = {
+            ann-1 = "ann-1"
+        }
+        },
+        test-3 = {
+        labels = {},
+        annotations = {}
+        }
+  }
+  prod = {
+    ns-1 = {
+        labels = {},
+        annotations = {}
+        },
+    ns-2 = {
+        labels = {},
+        annotations = {
+            ann-1 = "ann-1"
+        }
+        },
+        test-3 = {
+        labels = {},
+        annotations = {}
+        }
+  }
+}
+
 
 # https://www.puppeteers.net/blog/terraform-resources-with-dynamic-provider-values/#:~:text=Terraform%20allows%20you%20to%20define,have%20to%20learn%20provider%20aliases. 
 # provider "kubernetes" {

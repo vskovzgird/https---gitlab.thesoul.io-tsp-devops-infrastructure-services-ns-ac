@@ -4,25 +4,10 @@ provider "kubernetes" {
   insecure = true
 }
 
-module "team" {
+module "test_env" {
   source   = "../modules/team"
-  team_name = "devops"
+  team_name = local.team_name
   team_clusters  = {
-    test = {
-      test = {
-        labels = {},
-        annotations = {}
-      },
-      test-2 = {
-        labels = {},
-        annotations = {
-            ann-1 = "ann-1"
-        }
-      },
-      test-3 = {
-        labels = {},
-        annotations = {}
-      }
-    },
+    test = local.test
   }
 }
