@@ -2,13 +2,7 @@
 # в данном случае namespace ресурса итоговое имя будет namespace["namespace-1"]
 # i.e https://gitlab.thesoul.io/tsp/devops/infrastructure-services/hetzner/-/jobs/842165
 
-module "clusters" {
-  source = "../clusters"
-}
-
 # то еще извращение...
-
-
 
 # МОЖНО ЧЕРЕЗ locals сделать словарь из providers и по ключу получать нужный, затем передавать его в for_each
 
@@ -24,12 +18,6 @@ locals {
     ]
   ])
 }
-
-# resource "kubernetes_namespace" "test-test-2" {
-#   metadata {
-#     name = "test-2"
-#   }
-# }
 
 resource "kubernetes_namespace" "namespace" {
   for_each = {
