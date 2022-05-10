@@ -23,7 +23,8 @@ locals {
     test-2 = {
         labels = {},
         annotations = {
-            ann-1 = "ann-1"
+            ann-1 = "ann-1",
+            ann-2 = "ann-2"
         }
     },
         test-3 = {

@@ -17,27 +17,5 @@ variable "cluster_name" {
 variable "team_namespaces" {
   description = "Team clusters and their namespaces"
   type = map
-  default = {
-    nbg4 = {
-      test = {
-        labels = {},
-        annotations = {}
-      },
-      test-2 = {
-        labels = {},
-        annotations = {}
-      }
-    },
-    nbg2 = {
-      test = {
-        labels = {},
-        annotations = {}
-      },
-      test-3 = {
-        labels = {},
-        annotations = {}
-      }
-    },
-  }
 }
 

@@ -4,14 +4,11 @@
 
 # то еще извращение...
 
-# МОЖНО ЧЕРЕЗ locals сделать словарь из providers и по ключу получать нужный, затем передавать его в for_each
-
 locals {
   namespaces = flatten([
     for cluster, namespaces_list in var.team_namespaces : [
       for namespace_name, namespace_spec in namespaces_list : {
         name = namespace_name
-        cluster = var.cluster_name
         labels = namespace_spec.labels
         annotations = namespace_spec.annotations
       }
@@ -21,7 +18,7 @@ locals {
 
 resource "kubernetes_namespace" "namespace" {
   for_each = {
-    for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
+    for namespace in local.namespaces : "${var.cluster_name}-${namespace.name}" => namespace
   }
   lifecycle {
     prevent_destroy = true
@@ -38,7 +35,7 @@ resource "kubernetes_namespace" "namespace" {
 
 resource "kubernetes_network_policy" "zero-trust" {
   for_each = {
-    for namespace in local.namespaces : "${namespace.cluster}-${namespace.name}" => namespace
+    for namespace in local.namespaces : "${var.cluster_name}-${namespace.name}" => namespace
   }
   lifecycle {
     prevent_destroy = true
@@ -57,3 +54,4 @@ resource "kubernetes_network_policy" "zero-trust" {
 }
 
 # через conditional + count meta arg we can create access to Pods in same namespace and acccess to K8s DNS
+# т.е, создавать resource "kubernetes_network_policy" "dns-access" с count = 1 внутри, если в кониге передан bool флаг dns_access
