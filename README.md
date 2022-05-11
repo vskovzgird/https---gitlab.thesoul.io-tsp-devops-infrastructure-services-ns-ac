@@ -1,10 +1,9 @@
 # Description
 Проект для создания и управления Kubernetes namespace для команд разработчиков через Terraform
 
-Для каждой команды отдельынй пайп описанный в отдельном файле \
+Для каждой команды отдельные пайпы дял каждого кластера, описанные в отдельном файле \
 Для каждой команды свой GitLab TF State\
 Для каждой команды одна директория (модуль в терминологии Terraform), в котором будут описаны все её неймспейсы \
-Модуль версионируются.
 
 Модуль `team` используется для создания реальных namespace команд.
 
@@ -21,10 +20,9 @@
   https://www.terraform.io/cli/commands/import
   Создать namespace на пустом кластере и натравить терраформ со своим списком namespace, в котором нет тех, что есть на кластере.
 
-- Список кластеров - провайдеров терраформ с алиасами должен быть отдельнйо либой с версионированием
-- Сам модуль team так же должен быть версионирован, 
+- Список кластеров - провайдеров терраформ с алиасами должен быть отдельнйо либой с версионированием - не реализуемо в Terrafrom, гурсть, печаль, тоска
+- Сам модуль team так же должен быть версионирован
 - Сохранить модули в terrafrom GitLab registry
-- Проработать вопрос зависимости версий модулей от конфигураций команд
 - Аплоад в GitLab Terraform registry
 - Использование GitLab Terraform state
 
@@ -55,8 +53,8 @@ minikube kubectl get secrets -- -o jsonpath="{.items[?(@.metadata.annotations['k
 
 чтобы импортировать в state несуществующий там, но существующий на кластере namespace с именем test-2 нужно \
 
-- terraform.exe import 'module.team.kubernetes_namespace.namespace[\"test-test-2\"]' test-2 # WINDOWS POWERSHELL \
-  terraform.exe import 'module.team.kubernetes_namespace.namespace["test-test-2"]' test-2 # LINUX SHELL \
+- terraform.exe import 'module.team.kubernetes_namespace.namespace[\"test_env-test-2\"]' test-2 # WINDOWS POWERSHELL \
+  terraform.exe import 'module.team.kubernetes_namespace.namespace["test_env-test-2"]' test-2 # LINUX SHELL \
   ID это test-2, так как если посмотреть в terraform.tfstate, как там обозначен namesapce test-3, то "id": "test-3" \
   "test-test-2" - это индекс, так как у нас for_each \
 дальше раскоментируем test-2 в списке namespace команд и вызываем plan и смотрим, что нет ошибок, вызываем apply \

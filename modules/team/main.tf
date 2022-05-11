@@ -44,6 +44,7 @@ resource "kubernetes_network_policy" "zero-trust" {
   metadata {
     name      = "default-deny"
     namespace = each.value.name
+    labels = merge(each.value.labels, {team = var.team_name})
   }
 
   spec {
